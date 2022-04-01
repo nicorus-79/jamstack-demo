@@ -1,5 +1,7 @@
 <template>
   <div>
+    画像詳細画面
+    <br />
     <el-row type="flex" :data="item">
       <el-col :span="3">名称</el-col>
       <el-col :span="10">説明</el-col>
