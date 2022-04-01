@@ -9,14 +9,9 @@
           {{apiResult}}
         </dialog>
         <h1>写真一覧</h1>
-        <el-table
-          :data="items">
-          <el-table-column>
-            <template slot-scope="scope">
-            <nuxt-link :to="'/items/'+scope.row.id"><img :src="scope.row.image.url" /></nuxt-link>
-            </template>
-          </el-table-column>
-        </el-table>      
+        <ul v-for="item in items" :key="item.id">
+          <nuxt-link :to="'/items/'+item.id"><img :src="item.image.url" /></nuxt-link>
+        </ul>
       </div>
     </div>
   </div>
@@ -62,7 +57,6 @@ dialog {
 }
  
 dialog::backdrop {
-  /* 背景を半透明のブラックにする */
   background-color: rgba(0, 0, 0, 0.4);
 }
  </style>
