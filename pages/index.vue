@@ -10,7 +10,7 @@
         </dialog>
         <h1>写真一覧</h1>
         <ul v-for="item in items" :key="item.id">
-          <nuxt-link :to="'/items/'+item.id"><img :src="item.image.url" /></nuxt-link>
+          <nuxt-link :to="'/items/'+item.id"><img alt="item.name" :src="item.image.url" /></nuxt-link>
         </ul>
       </div>
     </div>
