@@ -17,7 +17,7 @@
  export default {
   async asyncData ({ $axios, params }) {
     const { data } = await $axios.get('https://jamstack--demo.microcms.io/api/v1/photo/'+params.id, {
-      headers: { 'X-MICROCMS-API-KEY': 'd5a89b117ef64b58bc511f4089e8b0c84aca' }
+      headers: { 'X-MICROCMS-API-KEY': process.env.MICROCMS_API_KEY }
     })
     return {
       item: data

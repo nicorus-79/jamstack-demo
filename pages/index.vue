@@ -1,15 +1,23 @@
 <template>
   <div>
     <div>
-      <h1>写真一覧</h1>
-      <el-table
-        :data="items">
-        <el-table-column>
-          <template slot-scope="scope">
-           <nuxt-link :to="'/items/'+scope.row.id"><img :src="scope.row.image.url" /></nuxt-link>
-          </template>
-        </el-table-column>
-      </el-table>
+      <div>
+        <input v-model="zipcode" />
+        <button @click="getProductsData(zipcode)">郵便番号情報取得</button>
+        <button @click="showResult=!showResult">{{showResult ? "閉じる" : "開く"}}</button>
+        <dialog v-if="showResult" :class="$style.dialog" open>
+          {{apiResult}}
+        </dialog>
+        <h1>写真一覧</h1>
+        <el-table
+          :data="items">
+          <el-table-column>
+            <template slot-scope="scope">
+            <nuxt-link :to="'/items/'+scope.row.id"><img :src="scope.row.image.url" /></nuxt-link>
+            </template>
+          </el-table-column>
+        </el-table>      
+      </div>
     </div>
   </div>
 </template>
@@ -17,12 +25,23 @@
  export default {
   data () {
     return {
-      items: []
+      items: [],
+      apiResult: "",
+      showResult: true,
+      zipcode: "",
     }
+  },
+  methods: {
+    async getProductsData(zipcode) {
+      const result = await fetch('https://zipcloud.ibsnet.co.jp/api/search?zipcode='+zipcode)
+      .then(response => response.json())
+      .catch(error => console.error(error));
+      this.apiResult = JSON.stringify(result);
+    },
   },
   async asyncData ({ $axios, params }) {
     const { data } = await $axios.get('https://jamstack--demo.microcms.io/api/v1/photo', {
-      headers: { 'X-MICROCMS-API-KEY': 'd5a89b117ef64b58bc511f4089e8b0c84aca' }
+      headers: { 'X-MICROCMS-API-KEY': process.env.MICROCMS_API_KEY }
     })
     return {
       items: data.contents
@@ -30,3 +49,20 @@
   },
  }
  </script>
+ <style module>
+dialog {
+  width:500px;
+  padding: 0;
+  border: 0;
+  border-radius: 0.6rem;
+  box-shadow: 0 0 1em black;
+  z-index: 10;
+  overflow-wrap: break-word;
+  position: fixed;
+}
+ 
+dialog::backdrop {
+  /* 背景を半透明のブラックにする */
+  background-color: rgba(0, 0, 0, 0.4);
+}
+ </style>
